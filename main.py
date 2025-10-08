@@ -1,9 +1,11 @@
-import PyQt6.QtWidgets as widgets
+from modules import app, main_window
 
-app = widgets.QApplication([])
-main_window = widgets.QMainWindow()
+def main():
+    try:
+        main_window.show()
+        app.exec()
+    except Exception as error:
+        print(error)
 
-main_window.setGeometry(150, 150, 1200, 800)
-
-main_window.show()
-app.exec()
+if __name__ == "__main__":
+    main()
