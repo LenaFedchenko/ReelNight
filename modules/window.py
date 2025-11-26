@@ -8,6 +8,7 @@ from PIL.ImageQt import ImageQt
 import os
 import PyQt6.QtGui as gui
 import PyQt6.QtCore as core
+from utils import api_request
 
 class Main_Window(widgets.QMainWindow):
     def __init__(self, name_title, color):
@@ -30,14 +31,16 @@ class Main_Window(widgets.QMainWindow):
         
         central_widget = Widget(1200, 800, self)
         main_frame = Frame(parent= central_widget, color= "#111318", width=1200, height= 800)
-        first_frame = Frame(parent= main_frame, color= "#184CCF", width=1200, height= 205)
-        second_frame = Frame(parent= main_frame, color= "#3DCF18", width=1200, height= 142)
+        first_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 205)
+        second_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 142)
         third_frame = Frame(parent= main_frame, color= "#CF1818", width=1200, height= 445)
 
         main_frame_layout = widgets.QVBoxLayout()
         main_frame.setLayout(main_frame_layout)
         first_frame_layout = widgets.QGridLayout()
         first_frame.setLayout(first_frame_layout)
+        second_frame_layout = widgets.QGridLayout()
+        second_frame.setLayout(second_frame_layout)
 
         main_frame_layout.addWidget(first_frame)
         main_frame_layout.addWidget(second_frame)
@@ -55,44 +58,53 @@ class Main_Window(widgets.QMainWindow):
 
 
         enter_text = widgets.QLineEdit(parent= first_frame)
-        enter_text.setPlaceholderText("enter text")
+        enter_text.setPlaceholderText("Search")
         
 
         def func():
             print(enter_text.text())
 
         enter_text.textChanged.connect(func)
-        enter_text.setStyleSheet("background-color: #1E2028; border-radius: 29px; font-size: 20px")
+        enter_text.setStyleSheet("background-color: #1E2028; border-radius: 29px; font-size: 20px; padding-left: 20px")
         enter_text.setFixedSize(943, 59)
         
-
         first_frame_layout.addWidget(enter_text, 2, 1)
 
+        movie = widgets.QLabel(parent= second_frame, text="Movies")
+        second_frame_layout.addWidget(movie, 1, 1)
+        movie.setStyleSheet("font-size: 36px; color: white")
 
-    #     # created label
-    #     label1 = widgets.QLabel(parent= first_frame, text="hello world")
-    #     main_frame_layout.addWidget(label1)
-    #     label1.setStyleSheet("font-size: 100px; color: pink;  font-weight:900")
-
-
-
-    #     button = widgets.QPushButton(parent= main_frame, text= "push")
-    #     button.setStyleSheet("background-color: pink; font-weight: 900;")
+        button_action = widgets.QPushButton(parent= second_frame, text= "Action")
+        button_action.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
+        button_action.setFixedSize(core.QSize(108, 36))
 
 
-    #     def click():
-    #         print("aaaaa")
+        button_drama = widgets.QPushButton(parent= second_frame, text= "Drama")
+        button_drama.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
+        button_drama.setFixedSize(core.QSize(108, 36))
+
+        button_comedy = widgets.QPushButton(parent= second_frame, text= "Comedy")
+        button_comedy.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
+        button_comedy.setFixedSize(core.QSize(108, 36))
+
+        button_horror = widgets.QPushButton(parent= second_frame, text= "Horror")
+        button_horror.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
+        button_horror.setFixedSize(core.QSize(108, 36))
+
+        def click():
+            api_request()
+        button_action.clicked.connect(click)
+        button_drama.clicked.connect(click)
+        button_comedy.clicked.connect(click)
+        button_horror.clicked.connect(click)
+
+        second_frame_layout.addWidget(button_action, 2, 1)
+        second_frame_layout.addWidget(button_drama, 2, 2)
+        second_frame_layout.addWidget(button_comedy, 2, 3)
+        second_frame_layout.addWidget(button_horror, 2, 4)
 
 
-    #     button.clicked.connect(click)
 
-    #     enter_text = widgets.QLineEdit(parent=main_frame)
-    #     enter_text.setPlaceholderText("enter text")
-
-    #     def func():
-    #         print(enter_text.text())
-
-    #     enter_text.textChanged.connect(func)
 
 
     #     down_list = widgets.QComboBox(parent= main_frame)
