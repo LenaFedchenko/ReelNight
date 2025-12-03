@@ -28,7 +28,7 @@ class Main_Window(widgets.QMainWindow):
         self.setGeometry(self.center_x, self.center_y, 1200, 800)
         self.setWindowTitle(name_title)
         self.setStyleSheet(f"background-color: {color}")
-        
+            
         central_widget = Widget(1200, 800, self)
         main_frame = Frame(parent= central_widget, color= "#111318", width=1200, height= 800)
         first_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 205)
@@ -56,19 +56,26 @@ class Main_Window(widgets.QMainWindow):
         label2.setPixmap(pixmap)
         first_frame_layout.addWidget(label2, 1, 1)
 
-
-        enter_text = widgets.QLineEdit(parent= first_frame)
-        enter_text.setPlaceholderText("Search")
+        self.enter_text = widgets.QLineEdit(parent=first_frame)
+        self.enter_text.setPlaceholderText("Search")
+        self.enter_text.setStyleSheet("background-color: #1E2028; border-radius: 29px; font-size: 20px; padding-left: 20px; color: white")
+        self.enter_text.setFixedSize(943, 59)
         
+        button_search = widgets.QPushButton(parent= first_frame, text= "Search")
+        button_search.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
+        button_search.setFixedSize(core.QSize(108, 36))
 
-        def func():
-            print(enter_text.text())
+        def search():
+            film_name = self.enter_text.text()
+            # print("Поиск:", film_name)
+            api_request(enter_text=film_name)
+        button_search.clicked.connect(search)
 
-        enter_text.textChanged.connect(func)
-        enter_text.setStyleSheet("background-color: #1E2028; border-radius: 29px; font-size: 20px; padding-left: 20px")
-        enter_text.setFixedSize(943, 59)
-        
-        first_frame_layout.addWidget(enter_text, 2, 1)
+
+        first_frame_layout.addWidget(self.enter_text, 2, 1)
+        first_frame_layout.addWidget(button_search, 2, 2)
+
+
 
         movie = widgets.QLabel(parent= second_frame, text="Movies")
         second_frame_layout.addWidget(movie, 1, 1)
@@ -91,8 +98,12 @@ class Main_Window(widgets.QMainWindow):
         button_horror.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
         button_horror.setFixedSize(core.QSize(108, 36))
 
+        # api_request(enter_text= self.enter_text.text())
         def click():
-            api_request()
+            print("a")
+            # film_name = self.enter_text.text()
+            # # print("Поиск:", film_name)
+            # api_request(enter_text=film_name)
         button_action.clicked.connect(click)
         button_drama.clicked.connect(click)
         button_comedy.clicked.connect(click)
