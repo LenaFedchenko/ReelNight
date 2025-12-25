@@ -1,6 +1,5 @@
 from modules import app, main_window
 
-
 def main():
     try:
         main_window.show()

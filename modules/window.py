@@ -9,11 +9,11 @@ import os
 import PyQt6.QtGui as gui
 import PyQt6.QtCore as core
 from utils import api_request
+from .cards import cadrs
 
 class Main_Window(widgets.QMainWindow):
     def __init__(self, name_title, color):
         super().__init__()
-
         self.window_width = 1200
         self.window_height = 800
 
@@ -33,7 +33,7 @@ class Main_Window(widgets.QMainWindow):
         main_frame = Frame(parent= central_widget, color= "#111318", width=1200, height= 800)
         first_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 205)
         second_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 142)
-        third_frame = Frame(parent= main_frame, color= "#CF1818", width=1200, height= 445)
+        self.third_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 445)
 
         main_frame_layout = widgets.QVBoxLayout()
         main_frame.setLayout(main_frame_layout)
@@ -41,10 +41,12 @@ class Main_Window(widgets.QMainWindow):
         first_frame.setLayout(first_frame_layout)
         second_frame_layout = widgets.QGridLayout()
         second_frame.setLayout(second_frame_layout)
+        self.third_frame_layout = widgets.QGridLayout()
+        self.third_frame.setLayout(self.third_frame_layout)
 
         main_frame_layout.addWidget(first_frame)
         main_frame_layout.addWidget(second_frame)
-        main_frame_layout.addWidget(third_frame)
+        main_frame_layout.addWidget(self.third_frame)
 
         # load our picture
         image_logo = Image.open(os.path.abspath(os.path.join(__file__, "..", "..", "images", "logo.png")))
@@ -64,18 +66,11 @@ class Main_Window(widgets.QMainWindow):
         button_search = widgets.QPushButton(parent= first_frame, text= "Search")
         button_search.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
         button_search.setFixedSize(core.QSize(108, 36))
-
-        def search():
-            film_name = self.enter_text.text()
-            # print("Поиск:", film_name)
-            api_request(enter_text=film_name)
-        button_search.clicked.connect(search)
-
+        
+        button_search.clicked.connect(self.search)
 
         first_frame_layout.addWidget(self.enter_text, 2, 1)
         first_frame_layout.addWidget(button_search, 2, 2)
-
-
 
         movie = widgets.QLabel(parent= second_frame, text="Movies")
         second_frame_layout.addWidget(movie, 1, 1)
@@ -83,31 +78,24 @@ class Main_Window(widgets.QMainWindow):
 
         button_action = widgets.QPushButton(parent= second_frame, text= "Action")
         button_action.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
-        button_action.setFixedSize(core.QSize(108, 36))
-
+        button_action.setFixedSize(core.QSize(158, 46))
 
         button_drama = widgets.QPushButton(parent= second_frame, text= "Drama")
         button_drama.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
-        button_drama.setFixedSize(core.QSize(108, 36))
+        button_drama.setFixedSize(core.QSize(158, 46))
 
         button_comedy = widgets.QPushButton(parent= second_frame, text= "Comedy")
         button_comedy.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
-        button_comedy.setFixedSize(core.QSize(108, 36))
+        button_comedy.setFixedSize(core.QSize(158, 46))
 
         button_horror = widgets.QPushButton(parent= second_frame, text= "Horror")
         button_horror.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
-        button_horror.setFixedSize(core.QSize(108, 36))
-
-        # api_request(enter_text= self.enter_text.text())
-        def click():
-            print("a")
-            # film_name = self.enter_text.text()
-            # # print("Поиск:", film_name)
-            # api_request(enter_text=film_name)
-        button_action.clicked.connect(click)
-        button_drama.clicked.connect(click)
-        button_comedy.clicked.connect(click)
-        button_horror.clicked.connect(click)
+        button_horror.setFixedSize(core.QSize(158, 46))
+        
+        button_action.clicked.connect(self.click)
+        button_drama.clicked.connect(self.click)
+        button_comedy.clicked.connect(self.click)
+        button_horror.clicked.connect(self.click)
 
         second_frame_layout.addWidget(button_action, 2, 1)
         second_frame_layout.addWidget(button_drama, 2, 2)
@@ -115,29 +103,19 @@ class Main_Window(widgets.QMainWindow):
         second_frame_layout.addWidget(button_horror, 2, 4)
 
 
+        cadrs(self.third_frame, self.third_frame_layout, 1, name_film= None)
+        cadrs(self.third_frame, self.third_frame_layout, 2, name_film= None)
+        cadrs(self.third_frame, self.third_frame_layout, 3, name_film= None)
+        cadrs(self.third_frame, self.third_frame_layout, 4, name_film= None)
+        cadrs(self.third_frame, self.third_frame_layout, 5, name_film= None)
 
+    def search(self):
+        film_name = self.enter_text.text()
+        # api_request(enter_text=film_name)
+        cadrs(self.third_frame, self.third_frame_layout, 0, name_film= film_name)
 
-
-    #     down_list = widgets.QComboBox(parent= main_frame)
-    #     down_list.addItem("Afrika")
-    #     down_list.addItem("Amerika")
-    #     down_list.addItem(gui.QIcon("images/monkey.png"), "hello")
-    #     down_list.currentTextChanged.connect(func)
-
-    #     main_frame_layout.addWidget(button, 3, 2)
-    #     main_frame_layout.addWidget(enter_text, 4, 4)
-
-
-    # def mousePressEvent(self, event: gui.QMouseEvent):
-    #     if event.button() == core.Qt.MouseButton.LeftButton:
-    #         print("click")
-
-    # def mouseMoveEvent(self, event: gui.QMouseEvent):
-    #     position = event.position()
-    #     point_pos = position.toPoint()
-    #     print(point_pos)
-
-    # def mouseReleaseEvent(self, event: gui.QMouseEvent):
-    #     event.button()
+    def click(self):
+        print("a")
+    
 
 main_window = Main_Window(name_title="ReelNight", color="#111318")
