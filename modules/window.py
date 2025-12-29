@@ -11,12 +11,13 @@ import PyQt6.QtCore as core
 from utils import api_request
 from .cards import cadrs
 
+
 class Main_Window(widgets.QMainWindow):
     def __init__(self, name_title, color):
         super().__init__()
         self.window_width = 1200
         self.window_height = 800
-
+        
         self.SCREEN = app.primaryScreen()
         self.screen_size = self.SCREEN.size()
         self.SCREEN_WIDTH = self.screen_size.width()
