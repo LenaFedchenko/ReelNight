@@ -1,1 +1,1 @@
-from .api_requests import api_request, test_movie
+from .api_requests import api_request, api_req

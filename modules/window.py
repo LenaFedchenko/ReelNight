@@ -8,8 +8,8 @@ from PIL.ImageQt import ImageQt
 import os
 import PyQt6.QtGui as gui
 import PyQt6.QtCore as core
-from utils import api_request
-from .cards import cadrs
+from .cards import cadrs, info_btn
+from utils.api_requests import api_req
 
 
 class Main_Window(widgets.QMainWindow):
@@ -29,7 +29,7 @@ class Main_Window(widgets.QMainWindow):
         self.setGeometry(self.center_x, self.center_y, 1200, 800)
         self.setWindowTitle(name_title)
         self.setStyleSheet(f"background-color: {color}")
-            
+        
         central_widget = Widget(1200, 800, self)
         main_frame = Frame(parent= central_widget, color= "#111318", width=1200, height= 800)
         first_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 205)
@@ -48,6 +48,7 @@ class Main_Window(widgets.QMainWindow):
         main_frame_layout.addWidget(first_frame)
         main_frame_layout.addWidget(second_frame)
         main_frame_layout.addWidget(self.third_frame)
+
 
         # load our picture
         image_logo = Image.open(os.path.abspath(os.path.join(__file__, "..", "..", "images", "logo.png")))
@@ -103,16 +104,14 @@ class Main_Window(widgets.QMainWindow):
         second_frame_layout.addWidget(button_comedy, 2, 3)
         second_frame_layout.addWidget(button_horror, 2, 4)
 
+        for i in range(5):
+            cadrs(self.third_frame, self.third_frame_layout, i, name_film= None)
+            info_btn(self.third_frame, self.third_frame_layout, i)
 
-        cadrs(self.third_frame, self.third_frame_layout, 1, name_film= None)
-        cadrs(self.third_frame, self.third_frame_layout, 2, name_film= None)
-        cadrs(self.third_frame, self.third_frame_layout, 3, name_film= None)
-        cadrs(self.third_frame, self.third_frame_layout, 4, name_film= None)
-        cadrs(self.third_frame, self.third_frame_layout, 5, name_film= None)
 
     def search(self):
         film_name = self.enter_text.text()
-        # api_request(enter_text=film_name)
+        api_req(name_film=film_name.lower())
         cadrs(self.third_frame, self.third_frame_layout, 0, name_film= film_name)
 
     def click(self):
