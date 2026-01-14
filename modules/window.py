@@ -9,7 +9,7 @@ import os
 import PyQt6.QtGui as gui
 import PyQt6.QtCore as core
 from .cards import cadrs, info_btn
-from utils.api_requests import api_req
+from utils.api_requests import search_film
 
 
 class Main_Window(widgets.QMainWindow):
@@ -105,13 +105,15 @@ class Main_Window(widgets.QMainWindow):
         second_frame_layout.addWidget(button_horror, 2, 4)
 
         for i in range(5):
+            # card = Card()
             cadrs(self.third_frame, self.third_frame_layout, i, name_film= None)
-            info_btn(self.third_frame, self.third_frame_layout, i)
+            info_btn(self.third_frame, self.third_frame_layout, i, frame= main_frame)
 
 
     def search(self):
+        # search = Card()
         film_name = self.enter_text.text()
-        api_req(name_film=film_name.lower())
+        search_film(name_film=film_name.lower())
         cadrs(self.third_frame, self.third_frame_layout, 0, name_film= film_name)
 
     def click(self):

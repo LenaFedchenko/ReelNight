@@ -8,7 +8,7 @@ def api_request():
         films = json.load(file)
     return films
 
-def api_req(name_film):
+def search_film(name_film):
     path = os.path.abspath(os.path.join(__file__, "..", "..", "static", "json", "json_watch.json"))
     with open(path) as file:
         films = json.load(file)
