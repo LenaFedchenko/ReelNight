@@ -13,5 +13,6 @@ def search_film(name_film):
     with open(path) as file:
         films = json.load(file)
     for title in films:
-        if title["title"].lower() == name_film:
-            return title
+        if name_film == title["title"].lower():
+            rank = title["rank"]
+            return title, rank

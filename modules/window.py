@@ -10,6 +10,7 @@ import PyQt6.QtGui as gui
 import PyQt6.QtCore as core
 from .cards import cadrs, info_btn
 from utils.api_requests import search_film
+from .load_image import ImageLoad
 
 
 class Main_Window(widgets.QMainWindow):
@@ -30,35 +31,23 @@ class Main_Window(widgets.QMainWindow):
         self.setWindowTitle(name_title)
         self.setStyleSheet(f"background-color: {color}")
         
-        central_widget = Widget(1200, 800, self)
-        main_frame = Frame(parent= central_widget, color= "#111318", width=1200, height= 800)
-        first_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 205)
-        second_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 142)
-        self.third_frame = Frame(parent= main_frame, color= "#111318", width=1200, height= 445)
-
         main_frame_layout = widgets.QVBoxLayout()
-        main_frame.setLayout(main_frame_layout)
         first_frame_layout = widgets.QGridLayout()
-        first_frame.setLayout(first_frame_layout)
         second_frame_layout = widgets.QGridLayout()
-        second_frame.setLayout(second_frame_layout)
         self.third_frame_layout = widgets.QGridLayout()
-        self.third_frame.setLayout(self.third_frame_layout)
+
+        central_widget = Widget(1200, 800, self)
+        self.main_frame = Frame(parent= central_widget, color= "#111318", width=1200, height= 800, layout=main_frame_layout)
+        first_frame = Frame(parent= self.main_frame, color= "#111318", width=1200, height= 205, layout= first_frame_layout)
+        second_frame = Frame(parent= self.main_frame, color= "#111318", width=1200, height= 142, layout= second_frame_layout)
+        self.third_frame = Frame(parent= self.main_frame, color= "#111318", width=1200, height= 445, layout= self.third_frame_layout)
+
 
         main_frame_layout.addWidget(first_frame)
         main_frame_layout.addWidget(second_frame)
         main_frame_layout.addWidget(self.third_frame)
 
-
-        # load our picture
-        image_logo = Image.open(os.path.abspath(os.path.join(__file__, "..", "..", "images", "logo.png")))
-        # changed picture for PQt6
-        qt_image = ImageQt(image_logo)
-        label2 = widgets.QLabel(parent= first_frame)
-        pixmap = gui.QPixmap(gui.QImage(qt_image))
-        pixmap = pixmap.scaled(400, 109)
-        label2.setPixmap(pixmap)
-        first_frame_layout.addWidget(label2, 1, 1)
+        image_logo = ImageLoad(width=400, height=109, img="logo.png", frame= first_frame, frame_layout= first_frame_layout, row=1, col=1)
 
         self.enter_text = widgets.QLineEdit(parent=first_frame)
         self.enter_text.setPlaceholderText("Search")
@@ -105,16 +94,16 @@ class Main_Window(widgets.QMainWindow):
         second_frame_layout.addWidget(button_horror, 2, 4)
 
         for i in range(5):
-            # card = Card()
-            cadrs(self.third_frame, self.third_frame_layout, i, name_film= None)
-            info_btn(self.third_frame, self.third_frame_layout, i, frame= main_frame)
+            index = cadrs(self.third_frame, self.third_frame_layout, i, name_film= None)
+            info_btn(self.third_frame, self.third_frame_layout, i, frame= self.main_frame, index_poster= index)
 
 
     def search(self):
-        # search = Card()
         film_name = self.enter_text.text()
         search_film(name_film=film_name.lower())
-        cadrs(self.third_frame, self.third_frame_layout, 0, name_film= film_name)
+        index2 = cadrs(self.third_frame, self.third_frame_layout, 0, name_film= film_name)
+        print(index2)
+        info_btn(self.third_frame, self.third_frame_layout, 0, frame= self.main_frame, index_poster= index2)
 
     def click(self):
         print("a")
