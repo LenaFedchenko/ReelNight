@@ -1,1 +1,1 @@
-from .api_requests import api_request, search_film
+from .api_requests import api_request, search_film, filter

@@ -5,11 +5,11 @@ from .frames import Frame
 from PIL import Image
 # class for change from pil to qt
 from PIL.ImageQt import ImageQt
-import os
+import os, random
 import PyQt6.QtGui as gui
 import PyQt6.QtCore as core
 from .cards import cadrs, info_btn
-from utils.api_requests import search_film
+from utils.api_requests import search_film, filter
 from .load_image import ImageLoad
 
 
@@ -67,32 +67,16 @@ class Main_Window(widgets.QMainWindow):
         second_frame_layout.addWidget(movie, 1, 1)
         movie.setStyleSheet("font-size: 36px; color: white")
 
-        button_action = widgets.QPushButton(parent= second_frame, text= "Action")
-        button_action.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
-        button_action.setFixedSize(core.QSize(158, 46))
+        genres = ["Fantasy", "Drama", "Comedy", "Horror", "Sci-Fi", "Animation", "Family", "Adventure","Mystery", "Thriller", "Film-Noir", "War", "Crime"]
+        for j in range(1, 5):
+            random_genres = random.randint(0, 12)
 
-        button_drama = widgets.QPushButton(parent= second_frame, text= "Drama")
-        button_drama.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
-        button_drama.setFixedSize(core.QSize(158, 46))
-
-        button_comedy = widgets.QPushButton(parent= second_frame, text= "Comedy")
-        button_comedy.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
-        button_comedy.setFixedSize(core.QSize(158, 46))
-
-        button_horror = widgets.QPushButton(parent= second_frame, text= "Horror")
-        button_horror.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
-        button_horror.setFixedSize(core.QSize(158, 46))
-        
-        button_action.clicked.connect(self.click)
-        button_drama.clicked.connect(self.click)
-        button_comedy.clicked.connect(self.click)
-        button_horror.clicked.connect(self.click)
-
-        second_frame_layout.addWidget(button_action, 2, 1)
-        second_frame_layout.addWidget(button_drama, 2, 2)
-        second_frame_layout.addWidget(button_comedy, 2, 3)
-        second_frame_layout.addWidget(button_horror, 2, 4)
-
+            self.btn = widgets.QPushButton(parent= second_frame, text= f"{genres[random_genres]}")
+            self.btn.setStyleSheet("background-color: #1D1E26; color: #70767C; border-radius: 10px")
+            self.btn.setFixedSize(core.QSize(158, 46))
+            self.btn.clicked.connect(self.click)
+            second_frame_layout.addWidget(self.btn, 2, j)
+            
         for i in range(5):
             index = cadrs(self.third_frame, self.third_frame_layout, i, name_film= None)
             info_btn(self.third_frame, self.third_frame_layout, i, frame= self.main_frame, index_poster= index)
@@ -102,11 +86,18 @@ class Main_Window(widgets.QMainWindow):
         film_name = self.enter_text.text()
         search_film(name_film=film_name.lower())
         index2 = cadrs(self.third_frame, self.third_frame_layout, 0, name_film= film_name)
-        print(index2)
         info_btn(self.third_frame, self.third_frame_layout, 0, frame= self.main_frame, index_poster= index2)
 
     def click(self):
-        print("a")
+        btn = self.sender()
+        genre_pressed = btn.text()
+        filter_genre = filter(genre_pressed)
+        i = 1
+        for genre_film in filter_genre:
+            if i < 5:
+                i += 1
+                index = cadrs(self.third_frame, self.third_frame_layout, i, name_film= None, genre= genre_film)
+                info_btn(self.third_frame, self.third_frame_layout, i, frame= self.main_frame, index_poster= index)
     
 
 main_window = Main_Window(name_title="ReelNight", color="#111318")

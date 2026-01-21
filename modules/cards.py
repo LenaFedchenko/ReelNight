@@ -1,36 +1,42 @@
 import PyQt6.QtWidgets as widgets
 from PIL import Image
-# class for change from pil to qt
 from PIL.ImageQt import ImageQt
 import requests, random
 import PyQt6.QtGui as gui
-from utils import api_request, search_film
+from utils import api_request, search_film, filter
 from io import BytesIO
 import PyQt6.QtCore as core
-import os
-import webbrowser
+import os, webbrowser
 from .frames import Frame
 from .load_image import ImageLoad
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QCursor
 
-def cadrs(third_frame, third_frame_layout, row, name_film):
-    if name_film == None:
-        info = api_request()
-        index = random.randint(0, 99)
-        response = requests.get(info[index]["image"])
-    elif name_film != None:
-        info, index = search_film(name_film= name_film)
-        if info:
-            response = requests.get(info["image"])
-            index = index - 1
-        elif info is None:
+def cadrs(third_frame, third_frame_layout, row, name_film, genre = None):
+    if genre == None:
+        if name_film == None:
             info = api_request()
             index = random.randint(0, 99)
             response = requests.get(info[index]["image"])
-    image_bytes = BytesIO(response.content)
-    poster = ImageLoad(width=200, height=309, bytes_img= image_bytes, frame= third_frame, frame_layout= third_frame_layout, row=1, col= row)
-    return index
+        elif name_film != None:
+            info, index = search_film(name_film= name_film)
+            if info:
+                response = requests.get(info["image"])
+                index = index - 1
+            elif info is None:
+                info = api_request()
+                index = random.randint(0, 99)
+                response = requests.get(info[index]["image"])
+        image_bytes = BytesIO(response.content)
+        poster = ImageLoad(width=200, height=309, bytes_img= image_bytes, frame= third_frame, frame_layout= third_frame_layout, row=1, col= row)
+        return index
+    else:
+        info = api_request()
+        index = genre
+        response = requests.get(info[index]["image"])
+        image_bytes = BytesIO(response.content)
+        poster = ImageLoad(width=200, height=309, bytes_img= image_bytes, frame= third_frame, frame_layout= third_frame_layout, row=1, col= row)
+        return index
 
 def info_btn(third_frame, third_frame_layout, row,frame, index_poster):
     info_btn = widgets.QPushButton(third_frame)
@@ -109,7 +115,7 @@ def test(frame, index_poster):
     response = requests.get(info[index_poster]["image"])
     image_bytes = BytesIO(response.content)
     img_poster = ImageLoad(width=145, height=232, frame= IMG_FRAME, frame_layout= IMG_FRAME_LAYOUT, bytes_img= image_bytes)
-
+    
     DESCRIPTION_LAYOUT = widgets.QVBoxLayout()
     DESCRIPTION = Frame(parent= MAIN_INFO, width=620, height= 226, layout= DESCRIPTION_LAYOUT)
     MAIN_INFO_LAYOUT.addWidget(DESCRIPTION)
